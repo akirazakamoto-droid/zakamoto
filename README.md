@@ -10,8 +10,25 @@ Sito d'arte di Akira Zakamoto (Luca Motolese) — galleria minimalista in PHP/My
 - `include/` — `data.php` (accesso dati + helper), `db.php` (PDO), `head/nav/footer`, `PHPMailer/`.
 - `assets/` — `style.css`, `app.js` (masonry + lightbox), `menu.js`, `files.js`.
 
-## Configurazione
-Copia `config.sample.php` in `config.php` e inserisci DB, SMTP, hCaptcha.
-In sviluppo locale crea un file vuoto `.local` (usa i dati da `data/*.json` e le immagini remote).
+## Avvio locale (da GitHub, senza server di produzione)
+Bastano PHP e questo repo — nessun database né disco esterno:
+```bash
+git clone https://github.com/akirazakamoto-droid/zakamoto.git
+cd zakamoto
+cp config.sample.php config.php   # in locale i valori DB possono restare placeholder
+type nul > .local                 # Windows  (Linux/Mac: touch .local)
+php -S localhost:8000
+```
+Apri http://localhost:8000
 
-> `config.php`, `.local` e `_admin_tmp/` sono esclusi dal repo (contengono credenziali).
+In **modalità locale** (presenza del file `.local`):
+- i contenuti vengono letti da `data/*.json` (snapshot del catalogo);
+- le immagini sono caricate dal sito live (`https://zakamoto.com/new/MAT/…`).
+
+Funzionano in sola lettura le pagine pubbliche (`art`, `atelier`, `files`, `about`, `expo`, `prizes`, `media`).
+Le funzioni che richiedono il database (area **Galleries & Collectors**, **contact**, **ADMIN**) sono attive solo in produzione con `config.php` reale.
+
+## Configurazione produzione
+Copia `config.sample.php` in `config.php` e inserisci DB, SMTP, hCaptcha (senza creare `.local`).
+
+> `config.php`, `.local` e `_admin_tmp/` sono esclusi dal repo (credenziali / file di servizio).
