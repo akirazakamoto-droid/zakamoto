@@ -26,6 +26,12 @@ if ($code === '' || $code === '0') {
     db()->prepare("UPDATE work SET archivio = ? WHERE id = ?")->execute([$code, $id]);
 }
 
+$w['archivio'] = $code;   // usa il codice finale (eventualmente appena generato)
+
+// Impronta del record-registro (Fase 0): SHA-256 pronto per l'ancoraggio su NetworkM3
+require_once __DIR__ . '/include/chain.php';
+$chain = chain_anchor_local($w);
+
 $title = w_title($w);
 $tech  = w_tech($w);
 $dim   = w_dimensions($w);
@@ -50,6 +56,9 @@ $img   = w_img($w['foto_big'] ?: $w['foto']);
   .firma { margin-top:24px; }
   .firma img { width:200px; height:auto; }
   .studio { color:#555; font-size:13px; margin-top:18px; line-height:1.6; }
+  .chain { margin:18px 0; padding:12px 14px; border:1px solid #e2e2e2; border-radius:6px; background:#fafafa; }
+  .chain-hash { font-family:'Courier New',monospace; font-size:12px; word-break:break-all; color:#222; margin:0 0 8px; }
+  .chain-note { font-size:12px; color:#666; margin:0; line-height:1.5; }
   @media print { .topbar { display:none; } .cert { margin-top:0; } }
 </style>
 </head>
@@ -68,6 +77,20 @@ $img   = w_img($w['foto_big'] ?: $w['foto']);
         <?php echo htmlspecialchars(trim($dim . ($dim && $tech ? ' · ' : '') . $tech)); ?>.<?php endif; ?><br><br>
       Il codice d'archivio dell'opera è il seguente: <span class="code"><?php echo htmlspecialchars($code); ?></span>
     </p>
+
+    <div class="chain">
+      <p class="meta" style="margin-bottom:4px">Impronta del registro (SHA-256):</p>
+      <p class="chain-hash"><?php echo htmlspecialchars($chain['hash']); ?></p>
+      <p class="chain-note">
+        <?php if (!empty($chain['row']['txid'])): ?>
+          ✓ Registrata sulla blockchain <strong>NetworkM3</strong> (Hyperledger Fabric, org <em>zkm.gallery</em>) —
+          tx <?php echo htmlspecialchars($chain['row']['txid']); ?><?php if (!empty($chain['row']['anchored_at'])): ?>, dal <?php echo htmlspecialchars($chain['row']['anchored_at']); ?><?php endif; ?>: dato immutabile e a prova di manomissione.
+        <?php else: ?>
+          Impronta calcolata e registrata, pronta per l'ancoraggio sulla blockchain <strong>NetworkM3</strong>
+          (Hyperledger Fabric, org <em>zkm.gallery</em>) che ne garantirà l'immutabilità.
+        <?php endif; ?>
+      </p>
+    </div>
 
     <div class="firma">
       <p class="meta">Firma autentica dell'autore:</p>
