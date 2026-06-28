@@ -1,0 +1,11 @@
+# Segreti e file locali — NON pubblicare
+config.php
+.local
+_admin_tmp/
+cache/
+*.bak
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
