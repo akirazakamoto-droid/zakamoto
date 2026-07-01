@@ -83,11 +83,11 @@ $img   = w_img($w['foto_big'] ?: $w['foto']);
       <p class="chain-hash"><?php echo htmlspecialchars($chain['hash']); ?></p>
       <p class="chain-note">
         <?php if (!empty($chain['row']['txid'])): ?>
-          ✓ Registrata sulla blockchain <strong>NetworkM3</strong> (Hyperledger Fabric, org <em>zkm.gallery</em>) —
-          tx <?php echo htmlspecialchars($chain['row']['txid']); ?><?php if (!empty($chain['row']['anchored_at'])): ?>, dal <?php echo htmlspecialchars($chain['row']['anchored_at']); ?><?php endif; ?>: dato immutabile e a prova di manomissione.
+          ✓ Registrata sul registro a catena di hash di <strong>NetworkM3</strong> — blocco
+          <?php echo htmlspecialchars($chain['row']['txid']); ?><?php if (!empty($chain['row']['anchored_at'])): ?>, dal <?php echo htmlspecialchars($chain['row']['anchored_at']); ?><?php endif; ?>:
+          dato immutabile e verificabile, in attesa dell'ancoraggio periodico sulla futura rete Hyperledger Fabric (org <em>zkm.gallery</em>).
         <?php else: ?>
-          Impronta calcolata e registrata, pronta per l'ancoraggio sulla blockchain <strong>NetworkM3</strong>
-          (Hyperledger Fabric, org <em>zkm.gallery</em>) che ne garantirà l'immutabilità.
+          Impronta calcolata e registrata, pronta per il registro a catena di hash di <strong>NetworkM3</strong>.
         <?php endif; ?>
       </p>
     </div>
